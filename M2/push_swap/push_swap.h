@@ -32,15 +32,5 @@ void	sort_swap(t_list **list, char *s);
 void	sort_rotate(t_list **list, char *s);
 void	sort_rrotate(t_list **list, char *s);
 void	sort_push(t_list **a, t_list **b, char *s);
-void	normal_sort(t_list **a, t_list **b);
-void	turkish_sort(t_list **a, t_list **b);
-int		get_min(t_list *stack);
-int		get_max(t_list *stack);
-int		get_position(t_list *stack, int value);
-int		find_target_pos(t_list *a, int value);
-int		calculate_cost(int pos_b, int pos_a, int size_a, int size_b);
-void	move_cheapest(t_list **a, t_list **b);
-void	do_move(t_list **a, t_list **b, int pos_a, int pos_b);
-void	rotate_to_min(t_list **a);
 
 #endif
