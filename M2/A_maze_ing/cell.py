@@ -42,20 +42,20 @@ class Cell:
     walls_state: int = field(default=walls)
 # todas las paredes activas al inicio
 
+    """Comprueba si existe una pared en la dirección dada."""
     def has_wall(self, direction: int) -> bool:
-        """Comprueba si existe una pared en la dirección dada."""
         return bool(self.walls_state & direction)
 
+    """Elimina la pared en la dirección dada."""
     def remove_wall(self, direction: int) -> None:
-        """Elimina la pared en la dirección dada."""
         self.walls_state &= ~direction
 
+    """Añade la pared en la dirección dada."""
     def add_wall(self, direction: int) -> None:
-        """Añade la pared en la dirección dada."""
         self.walls_state |= direction
 
+    """Devuelve True si la celda tiene las 4 paredes."""
     def is_closed(self) -> bool:
-        """Devuelve True si la celda tiene las 4 paredes."""
         return self.walls_state == walls
 
     def __repr__(self) -> str:
