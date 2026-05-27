@@ -1,39 +1,36 @@
-class GardenError(Exception):
-    pass
+def garden_operations(operation_number: int) -> None:
+
+    if (operation_number == 0):
+        print("Testing operation 0...")
+        int("abc")
+    elif (operation_number == 1):
+        print("Testing operation 1...")
+        10 / 0
+    elif (operation_number == 2):
+        print("Testing operation 2...")
+        open("/non/existent/file")
+    elif (operation_number == 3):
+        print("Testing operation 3...")
+        "hola" + 1
+    else:
+        print("Testing operation 4...")
+        print("Operation completed successfully\n")
 
 
-class PlantError(GardenError):
-    pass
+def test_error_types() -> None:
+    for i in range(5):
+        try:
+            garden_operations(i)
+        except ValueError as e:
+            print(f"Caught ValueError: {e}")
+        except ZeroDivisionError as e:
+            print(f"Caught ZeroDivisionError: {e}")
+        except FileNotFoundError as e:
+            print(f"Caught FileNotFoundError: {e}")
+        except TypeError as e:
+            print(f"Caught TypeError: {e}")
 
 
-class WaterError(GardenError):
-    pass
-
-
-def CustomErrors() -> None:
-    print("=== Custom Garden Errors Demo ===")
-    try:
-        print("Testing PlantError...")
-        raise PlantError("The tomato plant is wilting!")
-    except PlantError as e:
-        print(f"Caught PlantError: {e}\n")
-    try:
-        print("Testing WaterError...")
-        raise WaterError("Not enough water in the tank!")
-    except WaterError as e:
-        print(f"Caught WaterError: {e}\n")
-
-    print("Testing catching all garden errors...")
-    try:
-        raise PlantError("The tomato plant is wilting!")
-    except GardenError as e:
-        print(f"Caught a garden error: {e}")
-    try:
-        raise WaterError("Not enough water in the tank!")
-    except GardenError as e:
-        print(f"Caught a garden error: {e}\n")
-    print("All custom error types work correctly!")
-
-
-if __name__ == "__main__":
-    CustomErrors()
+print("=== Garden Error Types Demo ===")
+test_error_types()
+print("All error types tested successfully!")

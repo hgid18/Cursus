@@ -1,34 +1,30 @@
-def garden_operations() -> None:
-    print("=== Garden Error Types Demo ===\n")
-    try:
-        print("Testing ValueError...")
-        int("abc")
-    except ValueError:
-        print("Caught ValueError: invalid literal for int()\n")
-    try:
-        10 / 0
-    except ZeroDivisionError:
-        print("Testing ZeroDivisionError...")
-        print("Caught ZeroDivisionError: division by zero\n")
-    try:
-        print("Testing FileNotFoundError...")
-        open("missing.txt")
-    except FileNotFoundError:
-        print("FileNotFoundError: No such file 'missing.txt'\n")
-    try:
-        print("Testing KeyError...")
-        data: dict = {}
-        data["missing_plant"]
-    except KeyError:
-        print("Caught KeyError: 'missing_plant'\n")
-    try:
-        print("Testing multiple errors together...")
-        int("abc")
-        10 / 10
-        open("missing.txt")
-        data = {}
-        data["missing_plant"]
-    except (ValueError, ZeroDivisionError, FileNotFoundError, KeyError):
-        print("Caught an error, but program continues!\n")
+def input_temperature(temp_str: str) -> int:
+    temp = int(temp_str)
+    if temp < 0:
+        msg = f"{temp}°C is too cold for plants (min 0°C)"
+        raise ValueError(msg)
+    if temp > 40:
+        msg = f"{temp}°C is too hot for plants (max 40°C)"
+        raise ValueError(msg)
+    return temp
 
-    print("All error types tested successfully!")
+
+def test_temperature() -> None:
+    print("=== Garden Temperature Checker ===")
+
+    test_cases = ["25", "abc", "100", "-50"]
+
+    for test_input in test_cases:
+        print(f"Input data is '{test_input}'")
+        try:
+            temp = input_temperature(test_input)
+            print(f"Temperature is now {temp}°C")
+        except Exception as e:
+            msg = f"Caught input_temperature error: {e}"
+            print(msg)
+
+    print("All tests completed - program didn't crash!")
+
+
+if __name__ == "__main__":
+    test_temperature()
