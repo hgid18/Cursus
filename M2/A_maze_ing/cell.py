@@ -57,8 +57,3 @@ class Cell:
     """Devuelve True si la celda tiene las 4 paredes."""
     def is_closed(self) -> bool:
         return self.walls_state == walls
-
-    def __repr__(self) -> str:
-        active = [directions_letters[d] for d in (north, south, east, west)
-                  if self.has_wall(d)]
-        return f"Cell({self.row},{self.col} walls={''.join(active)})"

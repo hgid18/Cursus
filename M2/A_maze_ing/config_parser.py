@@ -68,7 +68,3 @@ def config_file(file_path: str) -> ConfigMaze:
         sys.exit(1)
 
     return config
-
-
-if __name__ == "__main__":
-    print(config_file("config.txt"))

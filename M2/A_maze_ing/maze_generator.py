@@ -15,7 +15,5 @@ class Maze:
         self.height = config.HEIGHT
         self.entry = config.ENTRY
         self.exit = config.EXIT
-        self.grid = [
-            [Cell(row=r, col=c) for c in range(self.width)]
-            for r in range(self.height)
-        ]
+        self.grid = [[Cell(row=r, col=c) for c in range(self.width)]
+            for r in range(self.height)]
