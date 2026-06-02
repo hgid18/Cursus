@@ -40,7 +40,6 @@ class Cell:
     row: int
     col: int
     walls_state: int = field(default=walls)
-# todas las paredes activas al inicio
 
     """Comprueba si existe una pared en la dirección dada."""
     def has_wall(self, direction: int) -> bool:
