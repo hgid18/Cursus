@@ -1,59 +1,47 @@
 import sys
+
 print("=== Inventory System Analysis ===")
-items = {}
+
+items: dict[str, int] = {}
+
 for arg in sys.argv[1:]:
-    parse = arg.split(":")
-    item = parse[0]
-    quantity = int(parse[1])
-    items[item] = quantity
-total_items = 0
-for quantity in items.values():
-    total_items += quantity
-unique_type = len(items)
-print(f"Total items in inventory: {total_items}")
-print(f"Unique item types: {unique_type}")
+    parts: list[str] = arg.split(":")
+    if len(parts) != 2 or parts[0] == "" or parts[1] == "":
+        print(f"Error - invalid parameter '{arg}'")
+        continue
+    name: str = parts[0]
+    if name in items:
+        print(f"Redundant item '{name}' - discarding")
+        continue
+    try:
+        quantity: int = int(parts[1])
+        items[name] = quantity
+    except ValueError as e:
+        print(f"Quantity error for '{name}': {e}")
 
-print("\n=== Current Inventory ===")
-for item, quantity in items.items():
-    percentage = (quantity / total_items) * 100
-    print(f"{item}: {quantity} units ({percentage:.1f}%)")
+if len(items) == 0:
+    print("Inventory is empty.")
+    sys.exit()
 
-print("\n=== Inventory Statistics ===")
-top = 1
-winner = ""
-for name, size in items.items():
-    if size > top:
-        top = size
-        winner = name
-print(f"Most abundant: {winner} ({top} units)")
-bot = 2
-loser = ""
-for name1, size1 in items.items():
-    if size1 < bot:
-        bot = size1
-        loser = name1
-print(f"Least abundant: {loser} ({bot} units)")
+print(f"Got inventory: {items}")
+print(f"Item list: {list(items.keys())}")
 
-print("\n=== Item Categories ===")
-moderate = {}
-scarce = {}
-for item, quantity in items.items():
-    if quantity > 3:
-        moderate[item] = quantity
-    else:
-        scarce[item] = quantity
-print(f"Moderate: {moderate}")
-print(f"Scarce: {scarce}")
+total: int = sum(items.values())
+print(f"Total quantity of the {len(items)} items: {total}")
 
-print("\n=== Management Suggestions ===")
-restock = []
-for item, quantity in items.items():
-    if quantity == 1:
-        restock.append(item)
-print(f"Restock needed: {restock}")
+for item, qty in items.items():
+    pct: float = round((qty / total) * 100, 1)
+    print(f"Item {item} represents {pct}%")
 
-print("\n=== Dictionary Properties Demo ===")
-print(f"Dictionary keys: {list(items.keys())}")
-print(f"Dictionary values: {list(items.values())}")
-sword_exist = items.get('sword') is not None
-print(f"Sample lookup - 'sword' in inventory: {sword_exist}")
+most: str = list(items.keys())[0]
+least: str = list(items.keys())[0]
+for item, qty in items.items():
+    if qty > items[most]:
+        most = item
+    if qty < items[least]:
+        least = item
+print(f"Item most abundant: {most} with quantity {items[most]}")
+print(f"Item least abundant: {least} with quantity {items[least]}")
+
+items.update({'magic_item': 1})
+print(f"Updated inventory: {items}")

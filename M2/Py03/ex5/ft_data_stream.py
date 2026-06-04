@@ -1,96 +1,43 @@
-def generate_game_events(n):
-    names = ["alice", "bob", "charlie", "kenny", "mickey"]
-    actions = ["killed monster", "found treasure", "leveled up",
-               "died in a horrible way", "lost his sanity"]
-    for i in range(n):
-        nm = names[i % len(names)]
-        level = (i % 15) + 1
-        act = actions[i % len(actions)]
-        event = f"Player {nm} (level {level}) {act}"
-        yield (event, level, act)
+import random
+from typing import Generator
+
+NAMES: list[str] = ['alice', 'bob', 'charlie', 'dylan']
+ACTIONS: list[str] = [
+    'run', 'eat', 'sleep', 'grab', 'move',
+    'climb', 'swim', 'use', 'release',
+]
+
+
+def gen_event() -> Generator[tuple[str, str], None, None]:
+    while True:
+        name: str = random.choice(NAMES)
+        action: str = random.choice(ACTIONS)
+        yield (name, action)
+
+
+def consume_event(
+    events: list[tuple[str, str]]
+) -> Generator[tuple[str, str], None, None]:
+    while len(events) > 0:
+        idx: int = random.randint(0, len(events) - 1)
+        event: tuple[str, str] = events[idx]
+        events.pop(idx)
+        yield event
 
 
 print("=== Game Data Stream Processor ===")
-print("\nProcessing 1000 game events...\n")
-events = generate_game_events(1000)
-total = 0
-treasure = 0
-levelup = 0
-high_level = 0
-for event in events:
-    event_text = event[0]
-    level = event[1]
-    action_data = event[2]
-    total += 1
-    if total <= 5:
-        print(f"Event {total}: {event_text}")
-    if level >= 10:
-        high_level += 1
-    if action_data == "found treasure":
-        treasure += 1
-    if action_data == "leveled up":
-        levelup += 1
 
-print("\n=== Stream Analytics ===")
-print(f"Total events processed: {total}")
-print(f"High-level players (10+): {high_level}")
-print(f"Treasure events: {treasure}")
-print(f"Level-up events: {levelup}")
+stream: Generator[tuple[str, str], None, None] = gen_event()
+for i in range(1000):
+    name, action = next(stream)
+    print(f"Event {i}: Player {name} did action {action}")
 
-print("\nMemory usage: Constant (streaming)")
-print("Processing time: 0.045 seconds")
-
-print("\n=== Generator Demonstration ===")
-
-
-def fibonacci_gen():
-    a = 0
-    b = 1
-    yield a
-    yield b
-    while True:
-        next = a + b
-        yield next
-        a = b
-        b = next
-
-
-def prime_gen():
-    yield 2
-    a = 3
-    while True:
-        is_prime = True
-        for i in range(2, a):
-            if a % i == 0:
-                is_prime = False
-                break
-        if is_prime:
-            yield a
-        a += 2
-
-
-fib = fibonacci_gen()
-fib_seq = []
+event_list: list[tuple[str, str]] = []
+stream2: Generator[tuple[str, str], None, None] = gen_event()
 for i in range(10):
-    fib_seq.append(next(fib))
+    event_list.append(next(stream2))
+print(f"\nBuilt list of 10 events: {event_list}")
 
-fib_str = ""
-for i in range(len(fib_seq)):
-    fib_str += str(fib_seq[i])
-    if i < len(fib_seq) - 1:
-        fib_str += ", "
-print(f"Fibonacci sequence (first 10): {fib_str}")
-
-prim = prime_gen()
-prim_seq = []
-for i in range(5):
-    prim_seq.append(next(prim))
-
-prim_str = ""
-for i in range(len(prim_seq)):
-    prim_str += str(prim_seq[i])
-    if i < len(prim_seq) - 1:
-        prim_str += ", "
-print(f"Prime numbers (first 5): {prim_str}")
-
-generate_game_events(10)
+for event in consume_event(event_list):
+    print(f"Got event from list: {event}")
+    print(f"Remains in list: {event_list}")
